@@ -9,11 +9,27 @@ const sesionesMock = [];
 let siguienteIdUsuario = 1;
 let siguienteIdSesion = 1;
 
+const intentosLogin = {};
+const LIMITE_INTENTOS = 5;
+const VENTANA_BLOQUEO_MS = 5 * 60 * 1000;
+
+function emailValido(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 router.post("/registro", async (req, res) => {
   const { nombre, email, password } = req.body;
 
   if (!nombre || !email || !password) {
     return res.status(400).json({ success: false, message: "Faltan datos obligatorios" });
+  }
+
+  if (!emailValido(email)) {
+    return res.status(400).json({ success: false, message: "El correo no tiene un formato válido" });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({ success: false, message: "La contraseña debe tener al menos 6 caracteres" });
   }
 
   try {
@@ -46,17 +62,35 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({ success: false, message: "Faltan datos obligatorios" });
   }
 
+  const ahora = Date.now();
+  const registro = intentosLogin[email];
+
+  if (registro && registro.bloqueadoHasta && ahora < registro.bloqueadoHasta) {
+    const segundosRestantes = Math.ceil((registro.bloqueadoHasta - ahora) / 1000);
+    return res.status(429).json({
+      success: false,
+      message: `Demasiados intentos fallidos. Intenta de nuevo en ${segundosRestantes} segundos`,
+    });
+  }
+
   try {
     if (USE_MOCK) {
       const usuario = usuariosMock.find((u) => u.email === email);
-      if (!usuario) {
+      const coincide = usuario ? await bcrypt.compare(password, usuario.passwordHash) : false;
+
+      if (!usuario || !coincide) {
+        const previo = intentosLogin[email] || { intentos: 0 };
+        const intentos = previo.intentos + 1;
+
+        intentosLogin[email] = {
+          intentos,
+          bloqueadoHasta: intentos >= LIMITE_INTENTOS ? ahora + VENTANA_BLOQUEO_MS : null,
+        };
+
         return res.status(401).json({ success: false, message: "Credenciales inválidas" });
       }
 
-      const coincide = await bcrypt.compare(password, usuario.passwordHash);
-      if (!coincide) {
-        return res.status(401).json({ success: false, message: "Credenciales inválidas" });
-      }
+      delete intentosLogin[email];
 
       const nuevaSesion = {
         id: siguienteIdSesion++,
