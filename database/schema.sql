@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     email VARCHAR(255) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    rol ENUM('usuario', 'admin') NOT NULL DEFAULT 'usuario',
     PRIMARY KEY (id),
     UNIQUE KEY uq_usuarios_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
