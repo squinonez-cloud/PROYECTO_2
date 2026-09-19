@@ -1,5 +1,4 @@
-import express from 'express';
-
+const express = require('express');
 const router = express.Router();
 
 const usuariosSimulados = [
@@ -22,8 +21,7 @@ router.get('/sesiones', (req, res) => {
       fechaSalida: sesion.fechaSalida
     };
   });
-
   res.json(respuesta);
 });
 
-export default router;
+module.exports = router;
