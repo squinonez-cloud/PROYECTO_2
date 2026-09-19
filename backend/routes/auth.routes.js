@@ -1,13 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const pool = require("../config/db");
 const router = express.Router();
-
-const USE_MOCK = true;
-
-const usuariosMock = [];
-const sesionesMock = [];
-let siguienteIdUsuario = 1;
-let siguienteIdSesion = 1;
 
 const intentosLogin = {};
 const LIMITE_INTENTOS = 5;
@@ -33,22 +27,21 @@ router.post("/registro", async (req, res) => {
   }
 
   try {
-    const passwordHash = await bcrypt.hash(password, 10);
-
-    if (USE_MOCK) {
-      const existe = usuariosMock.find((u) => u.email === email);
-      if (existe) {
-        return res.status(409).json({ success: false, message: "Ese correo ya está registrado" });
-      }
-
-      const nuevoUsuario = { id: siguienteIdUsuario++, nombre, email, passwordHash };
-      usuariosMock.push(nuevoUsuario);
-
-      return res.json({
-        success: true,
-        usuario: { id: nuevoUsuario.id, nombre: nuevoUsuario.nombre, email: nuevoUsuario.email },
-      });
+    const [existentes] = await pool.query("SELECT id FROM usuarios WHERE email = ?", [email]);
+    if (existentes.length > 0) {
+      return res.status(409).json({ success: false, message: "Ese correo ya está registrado" });
     }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const [resultado] = await pool.query(
+      "INSERT INTO usuarios (nombre, email, password_hash) VALUES (?, ?, ?)",
+      [nombre, email, passwordHash]
+    );
+
+    return res.json({
+      success: true,
+      usuario: { id: resultado.insertId, nombre, email },
+    });
   } catch (error) {
     console.error("Error en /registro:", error);
     res.status(500).json({ success: false, message: "Error al registrar usuario" });
@@ -74,38 +67,34 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    if (USE_MOCK) {
-      const usuario = usuariosMock.find((u) => u.email === email);
-      const coincide = usuario ? await bcrypt.compare(password, usuario.passwordHash) : false;
+    const [usuarios] = await pool.query("SELECT * FROM usuarios WHERE email = ?", [email]);
+    const usuario = usuarios[0];
+    const coincide = usuario ? await bcrypt.compare(password, usuario.password_hash) : false;
 
-      if (!usuario || !coincide) {
-        const previo = intentosLogin[email] || { intentos: 0 };
-        const intentos = previo.intentos + 1;
+    if (!usuario || !coincide) {
+      const previo = intentosLogin[email] || { intentos: 0 };
+      const intentos = previo.intentos + 1;
 
-        intentosLogin[email] = {
-          intentos,
-          bloqueadoHasta: intentos >= LIMITE_INTENTOS ? ahora + VENTANA_BLOQUEO_MS : null,
-        };
-
-        return res.status(401).json({ success: false, message: "Credenciales inválidas" });
-      }
-
-      delete intentosLogin[email];
-
-      const nuevaSesion = {
-        id: siguienteIdSesion++,
-        idUsuario: usuario.id,
-        fechaEntrada: new Date().toISOString(),
-        fechaSalida: null,
+      intentosLogin[email] = {
+        intentos,
+        bloqueadoHasta: intentos >= LIMITE_INTENTOS ? ahora + VENTANA_BLOQUEO_MS : null,
       };
-      sesionesMock.push(nuevaSesion);
 
-      return res.json({
-        success: true,
-        usuario: { id: usuario.id, nombre: usuario.nombre, email: usuario.email },
-        idSesion: nuevaSesion.id,
-      });
+      return res.status(401).json({ success: false, message: "Credenciales inválidas" });
     }
+
+    delete intentosLogin[email];
+
+    const [resultadoSesion] = await pool.query(
+      "INSERT INTO sesiones (id_usuario) VALUES (?)",
+      [usuario.id]
+    );
+
+    return res.json({
+      success: true,
+      usuario: { id: usuario.id, nombre: usuario.nombre, email: usuario.email },
+      idSesion: resultadoSesion.insertId,
+    });
   } catch (error) {
     console.error("Error en /login:", error);
     res.status(500).json({ success: false, message: "Error al iniciar sesión" });
@@ -120,13 +109,8 @@ router.post("/logout", async (req, res) => {
   }
 
   try {
-    if (USE_MOCK) {
-      const sesion = sesionesMock.find((s) => s.id === idSesion);
-      if (sesion) {
-        sesion.fechaSalida = new Date().toISOString();
-      }
-      return res.json({ success: true });
-    }
+    await pool.query("UPDATE sesiones SET fecha_salida = NOW() WHERE id = ?", [idSesion]);
+    return res.json({ success: true });
   } catch (error) {
     console.error("Error en /logout:", error);
     res.status(500).json({ success: false, message: "Error al cerrar sesión" });

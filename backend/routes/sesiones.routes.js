@@ -1,27 +1,24 @@
 const express = require("express");
+const pool = require("../config/db");
 const router = express.Router();
 
-const usuariosSimulados = [
-  { id: 1, nombre: "Carlos Pérez" },
-  { id: 2, nombre: "Ana Gómez" }
-];
+router.get("/sesiones", async (req, res) => {
+  try {
+    const [filas] = await pool.query(
+      `SELECT s.id AS id,
+              u.nombre AS usuario,
+              DATE_FORMAT(s.fecha_entrada, '%Y-%m-%d %H:%i') AS fechaEntrada,
+              DATE_FORMAT(s.fecha_salida, '%Y-%m-%d %H:%i') AS fechaSalida
+       FROM sesiones s
+       JOIN usuarios u ON s.id_usuario = u.id
+       ORDER BY s.fecha_entrada DESC`
+    );
 
-const sesionesSimuladas = [
-  { id: 1, usuarioId: 1, fechaEntrada: "2026-09-17 09:10", fechaSalida: null },
-  { id: 2, usuarioId: 2, fechaEntrada: "2026-09-17 10:00", fechaSalida: "2026-09-17 11:30" }
-];
-
-router.get("/sesiones", (req, res) => {
-  const respuesta = sesionesSimuladas.map((sesion) => {
-    const usuarioEncontrado = usuariosSimulados.find((u) => u.id === sesion.usuarioId);
-    return {
-      id: sesion.id,
-      usuario: usuarioEncontrado ? usuarioEncontrado.nombre : "Usuario Desconocido",
-      fechaEntrada: sesion.fechaEntrada,
-      fechaSalida: sesion.fechaSalida,
-    };
-  });
-  res.json(respuesta);
+    res.json(filas);
+  } catch (error) {
+    console.error("Error en /sesiones:", error);
+    res.status(500).json({ success: false, message: "Error al obtener el historial" });
+  }
 });
 
 module.exports = router;
