@@ -133,4 +133,18 @@ router.post("/logout", async (req, res) => {
   }
 });
 
+router.get("/sesiones", (req, res) => {
+  const respuesta = sesionesMock.map((sesion) => {
+    const usuarioEncontrado = usuariosMock.find((u) => u.id === sesion.idUsuario);
+    return {
+      id: sesion.id,
+      usuario: usuarioEncontrado ? usuarioEncontrado.nombre : "Usuario Desconocido",
+      fechaEntrada: sesion.fechaEntrada,
+      fechaSalida: sesion.fechaSalida,
+    };
+  });
+
+  res.json(respuesta);
+});
+
 module.exports = router;
