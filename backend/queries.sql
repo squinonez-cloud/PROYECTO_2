@@ -1,4 +1,4 @@
-SELECT 
+SELECT
   s.id AS id,
   u.nombre AS usuario,
   DATE_FORMAT(s.fecha_entrada, '%Y-%m-%d %H:%i') AS fechaEntrada,
