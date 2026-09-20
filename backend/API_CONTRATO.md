@@ -98,3 +98,22 @@ Base URL en desarrollo: `http://localhost:4000/api`
 - El único endpoint que devuelve una lista (`/sesiones`) responde con el arreglo directo, sin envolver — así lo espera ya el frontend.
 - Los códigos de error usan: `400` (datos faltantes o inválidos), `401` (credenciales incorrectas), `409` (ya existe), `500` (error del servidor).
 - Los nombres de campos siempre en español y en `camelCase` (ej. `fechaEntrada`, no `fecha_entrada` ni `fecha entrada`).
+
+---
+
+## GET /productos
+
+**No recibe body.**
+
+**Respuesta: un arreglo directo (NO envuelto en un objeto):**
+```json
+[
+  {
+    "id": 1,
+    "titulo": "string",
+    "artista": "string",
+    "precio": 24.99,
+    "imagen": "string (URL)"
+  }
+]
+```
