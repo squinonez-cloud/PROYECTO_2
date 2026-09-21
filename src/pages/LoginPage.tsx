@@ -1,68 +1,57 @@
-import { useState, FormEvent } from "react";
-import { login } from "../services/authService";
-import "./AuthForms.css";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [cargando, setCargando] = useState(false);
+export const LoginPage: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-  async function manejarEnvio(e: FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setCargando(true);
+    setError('');
 
     try {
-      const respuesta = await login({ email, password });
-      if (respuesta.success) {
-        // Aquí luego se puede guardar el usuario en un contexto global
-        // o redirigir a la página principal de la tienda.
-        console.log("Sesión iniciada:", respuesta.usuario);
-        alert(`Bienvenido, ${respuesta.usuario?.nombre}`);
+      const respuesta = await fetch('http://localhost:4000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      }).then((res) => res.json());
+
+      if (respuesta.success && respuesta.usuario && respuesta.idSesion) {
+        login(respuesta.usuario, respuesta.idSesion);
+        navigate('/dashboard');
       } else {
-        setError(respuesta.message ?? "No se pudo iniciar sesión");
+        setError(respuesta.mensaje || 'Credenciales inválidas');
       }
     } catch (err) {
-      setError("Error de conexión con el servidor");
-    } finally {
-      setCargando(false);
+      setError('Error de conexión con el servidor');
     }
-  }
+  };
 
   return (
     <div className="auth-container">
-      <form className="auth-form" onSubmit={manejarEnvio}>
-        <h1>Iniciar sesión</h1>
-
-        <label htmlFor="email">Correo electrónico</label>
+      <form onSubmit={handleSubmit} className="auth-form">
+        <h2>Iniciar Sesión</h2>
+        {error && <p className="error-message">{error}</p>}
         <input
-          id="email"
           type="email"
+          placeholder="Correo Electrónico"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-
-        <label htmlFor="password">Contraseña</label>
         <input
-          id="password"
           type="password"
+          placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-
-        {error && <p className="auth-error">{error}</p>}
-
-        <button type="submit" disabled={cargando}>
-          {cargando ? "Ingresando..." : "Ingresar"}
-        </button>
-
-        <p className="auth-link">
-          ¿No tienes cuenta? <a href="/registro">Regístrate aquí</a>
-        </p>
+        <button type="submit">Entrar</button>
       </form>
     </div>
   );
-}
+};
