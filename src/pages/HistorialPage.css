@@ -1,0 +1,31 @@
+.historial-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  color: #fff;
+}
+
+.historial-container h1 {
+  margin-bottom: 1rem;
+}
+
+.historial-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1b1b1b;
+}
+
+.historial-tabla th,
+.historial-tabla td {
+  border: 1px solid #333;
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+}
+
+.historial-tabla th {
+  background-color: #2a2a2a;
+}
+
+.historial-error {
+  color: #c0392b;
+}
