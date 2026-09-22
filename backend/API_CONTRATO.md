@@ -20,7 +20,7 @@ Base URL en desarrollo: `http://localhost:4000/api`
 ```json
 {
   "success": true,
-  "usuario": { "id": 1, "nombre": "Nombre", "email": "correo@ejemplo.com" },
+  "usuario": { "id": 1, "nombre": "Nombre", "email": "correo@ejemplo.com", "rol": "usuario" },
   "idSesion": 1
 }
 ```
