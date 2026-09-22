@@ -92,7 +92,7 @@ router.post("/login", async (req, res) => {
 
     return res.json({
       success: true,
-      usuario: { id: usuario.id, nombre: usuario.nombre, email: usuario.email },
+      usuario: { id: usuario.id, nombre: usuario.nombre, email: usuario.email, rol: usuario.rol },
       idSesion: resultadoSesion.insertId,
     });
   } catch (error) {
