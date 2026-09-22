@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HistorialPage from "./pages/HistorialPage";
+import CarritoPage from "./pages/CarritoPage";
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<RegisterPage />} />
         <Route path="/historial" element={<HistorialPage />} />
+        <Route path="/carrito" element={<CarritoPage />} />
       </Routes>
     </BrowserRouter>
   );
