@@ -1,0 +1,108 @@
+:root {
+  --bg-dark: #0a0812;
+  --card-bg: rgba(22, 18, 38, 0.85);
+  --neon-pink: #ff007f;
+  --neon-cyan: #00f3ff;
+  --neon-purple: #8a2be2;
+  --text-main: #f4f4f9;
+  --text-muted: #a0a0c0;
+}
+
+.carrito-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  color: var(--text-main);
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 0, 127, 0.2);
+}
+
+.carrito-container h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #ffffff 30%, var(--neon-cyan));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.carrito-tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.carrito-tabla th,
+.carrito-tabla td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+  color: var(--text-main);
+}
+
+.carrito-tabla th {
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.carrito-cantidad {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.carrito-cantidad button {
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 0, 127, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.carrito-cantidad button:hover {
+  transform: translateY(-1px);
+}
+
+.carrito-total {
+  margin-top: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: right;
+  color: var(--neon-cyan);
+}
+
+.carrito-confirmar {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.carrito-confirmar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 0, 127, 0.6), 0 0 10px rgba(0, 243, 255, 0.4);
+}

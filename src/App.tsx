@@ -5,6 +5,7 @@ import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import CatalogoPage from "./pages/CatalogoPage";
 import HistorialPage from "./pages/HistorialPage";
+import CarritoPage from "./pages/CarritoPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/catalogo" element={<CatalogoPage />} />
           <Route path="/historial" element={<HistorialPage />} />
+          <Route path="/carrito" element={<CarritoPage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
