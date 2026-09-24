@@ -57,4 +57,23 @@ router.post("/ordenes", async (req, res) => {
   }
 });
 
+router.get("/ordenes", async (req, res) => {
+  try {
+    const [filas] = await pool.query(
+      `SELECT o.id AS id,
+              u.nombre AS usuario,
+              o.total AS total,
+              o.estado AS estado,
+              DATE_FORMAT(o.fecha, '%Y-%m-%d %H:%i') AS fecha
+       FROM ordenes o
+       JOIN usuarios u ON o.id_usuario = u.id
+       ORDER BY o.fecha DESC`
+    );
+
+    res.json(filas);
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error al obtener las órdenes" });
+  }
+});
+
 module.exports = router;
