@@ -1,11 +1,22 @@
+import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import LoginPage from "./pages/LoginPage";
+import { LoginPage } from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import DashboardPage from "./pages/DashboardPage";
-import CatalogoPage from "./pages/CatalogoPage";
+import { DashboardPage } from "./pages/DashboardPage";
+import { CatalogoPage } from "./pages/CatalogoPage";
 import HistorialPage from "./pages/HistorialPage";
 import CarritoPage from "./pages/CarritoPage";
+import AdminPage from "./pages/AdminPage";
+import { useAuth } from "./context/AuthContext";
+
+function RutaAdmin({ children }: { children: React.ReactNode }) {
+  const { usuario } = useAuth();
+  if (!usuario || usuario.rol !== "admin") {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
 
 function App() {
   return (
@@ -19,6 +30,7 @@ function App() {
           <Route path="/catalogo" element={<CatalogoPage />} />
           <Route path="/historial" element={<HistorialPage />} />
           <Route path="/carrito" element={<CarritoPage />} />
+          <Route path="/admin" element={<RutaAdmin><AdminPage /></RutaAdmin>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
