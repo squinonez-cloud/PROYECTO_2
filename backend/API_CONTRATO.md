@@ -92,20 +92,11 @@ Base URL en desarrollo: `http://localhost:4000/api`
 
 ---
 
-## Reglas generales para cualquier endpoint nuevo
-
-- Todo endpoint que devuelva un solo resultado (login, registro) responde con `{ success, ... }`.
-- El único endpoint que devuelve una lista (`/sesiones`) responde con el arreglo directo, sin envolver — así lo espera ya el frontend.
-- Los códigos de error usan: `400` (datos faltantes o inválidos), `401` (credenciales incorrectas), `409` (ya existe), `500` (error del servidor).
-- Los nombres de campos siempre en español y en `camelCase` (ej. `fechaEntrada`, no `fecha_entrada` ni `fecha entrada`).
-
----
-
 ## GET /productos
 
 **No recibe body.**
 
-**Respuesta: un arreglo directo (NO envuelto en un objeto):**
+**Respuesta exitosa (200) — arreglo directo:**
 ```json
 [
   {
@@ -117,3 +108,91 @@ Base URL en desarrollo: `http://localhost:4000/api`
   }
 ]
 ```
+
+---
+
+## POST /ordenes
+
+**Body que recibe:**
+```json
+{
+  "idUsuario": 1,
+  "items": [
+    { "id": 3, "cantidad": 2 }
+  ]
+}
+```
+
+El precio de cada item se calcula del lado del servidor (consultando la tabla `vinilos`), nunca se recibe del cliente.
+
+**Respuesta exitosa (200):**
+```json
+{ "success": true, "idOrden": 5, "subtotal": 100.00, "iva": 12.00, "total": 112.00 }
+```
+
+El IVA se calcula automáticamente al 12% del subtotal. El total
+(que incluye IVA) es lo que se guarda en la tabla ordenes y lo que
+se usa para el asiento contable (cargo a Caja).
+
+**Respuesta de error (400):**
+```json
+{ "success": false, "message": "Descripción del error" }
+```
+
+Al crearse la orden, el backend genera automáticamente el asiento contable correspondiente (ver `services/contable.service.js`).
+
+---
+
+## GET /ordenes
+
+**No recibe body.**
+
+**Respuesta exitosa (200) — arreglo directo:**
+```json
+[
+  {
+    "id": 1,
+    "usuario": "Nombre del usuario",
+    "total": 112.00,
+    "estado": "pendiente",
+    "fecha": "2026-09-20 14:30"
+  }
+]
+```
+
+---
+
+## GET /balance
+
+**No recibe body.**
+
+**Respuesta exitosa (200):**
+```json
+{
+  "cuentas": [
+    {
+      "codigo": "1000",
+      "cuenta": "Caja",
+      "tipo": "activo",
+      "totalCargos": 112.00,
+      "totalAbonos": 0
+    }
+  ],
+  "totalCargos": 112.00,
+  "totalAbonos": 112.00,
+  "cuadra": true
+}
+```
+
+`cuadra` es `true` cuando el total de cargos es igual al total de abonos en todas las cuentas.
+
+---
+
+## Reglas generales para cualquier endpoint nuevo
+
+- Un endpoint que devuelve un solo resultado (login, registro, crear una orden) responde con `{ success, ... }`.
+- Un endpoint que devuelve una lista (`/sesiones`, `/productos`, `/ordenes`) responde con el arreglo directo, sin envolver en un objeto.
+- `/balance` es la única excepción a la regla de lista directa, porque además del arreglo de cuentas necesita devolver los totales generales y si cuadra.
+- Los códigos de error usan: `400` (datos faltantes o inválidos), `401` (credenciales incorrectas), `409` (ya existe), `429` (demasiados intentos), `500` (error del servidor).
+- Los nombres de campos siempre en español y en `camelCase` (ej. `fechaEntrada`, no `fecha_entrada` ni `fecha entrada`).
+- Ningún endpoint expone `password` ni `passwordHash` en sus respuestas.
