@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { itemsSimulados } from "../services/carritoService";
 import type { ItemCarrito } from "../services/carritoService";
+import Navbar from "../components/Navbar";
 import "./CarritoPage.css";
 
 export default function CarritoPage() {
@@ -31,6 +32,8 @@ export default function CarritoPage() {
   }
 
   return (
+    <>
+    <Navbar />
     <div className="carrito-container">
       <h1>Tu carrito</h1>
 
@@ -69,5 +72,6 @@ export default function CarritoPage() {
         Confirmar compra
       </button>
     </div>
+    </>
   );
 }

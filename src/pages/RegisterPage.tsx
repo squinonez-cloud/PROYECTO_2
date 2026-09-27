@@ -9,6 +9,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [cargando, setCargando] = useState(false);
+  const [mostrarPassword, setMostrarPassword] = useState<boolean>(false);
 
   async function manejarEnvio(e: FormEvent) {
     e.preventDefault();
@@ -53,14 +54,23 @@ export default function RegisterPage() {
         />
 
         <label htmlFor="password">Contraseña</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          minLength={6}
-        />
+        <div className="password-input-wrapper">
+          <input
+            id="password"
+            type={mostrarPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={6}
+          />
+          <button
+            type="button"
+            className="password-toggle-btn"
+            onClick={() => setMostrarPassword(!mostrarPassword)}
+          >
+            {mostrarPassword ? '🙈' : '👁️'}
+          </button>
+        </div>
 
         {error && <p className="auth-error">{error}</p>}
 
