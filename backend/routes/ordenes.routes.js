@@ -3,14 +3,33 @@ const router = express.Router();
 const pool = require("../config/db");
 const { generarAsientoVenta } = require("../services/contable.service");
 
+function esTarjetaValida(numero) {
+  const digitos = numero.replace(/\D/g, "").split("").reverse().map(Number);
+  const suma = digitos.reduce((acc, d, i) => {
+    if (i % 2 === 1) {
+      d *= 2;
+      if (d > 9) d -= 9;
+    }
+    return acc + d;
+  }, 0);
+  return digitos.length >= 13 && suma % 10 === 0;
+}
+
 router.post("/ordenes", async (req, res) => {
   try {
-    const { idUsuario, items } = req.body;
+    const { idUsuario, numeroTarjeta, items } = req.body;
 
     if (!idUsuario || !items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         success: false,
         message: "El idUsuario y un arreglo de items no vacío son obligatorios."
+      });
+    }
+
+    if (!numeroTarjeta || !esTarjetaValida(numeroTarjeta)) {
+      return res.status(400).json({
+        success: false,
+        message: "Número de tarjeta inválido"
       });
     }
 
