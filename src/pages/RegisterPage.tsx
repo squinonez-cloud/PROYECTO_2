@@ -1,4 +1,5 @@
-import { useState, FormEvent } from "react";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { registrar } from "../services/authService";
 import "./AuthForms.css";
 
@@ -18,7 +19,6 @@ export default function RegisterPage() {
       const respuesta = await registrar({ nombre, email, password });
       if (respuesta.success) {
         alert("Cuenta creada correctamente. Ahora puedes iniciar sesión.");
-        // Aquí después se puede redirigir automáticamente a /login
       } else {
         setError(respuesta.message ?? "No se pudo crear la cuenta");
       }

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { login as loginRequest } from '../services/authService';
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -9,22 +11,18 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
 
     try {
-      const respuesta = await fetch('http://localhost:4000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      }).then((res) => res.json());
+      const respuesta = await loginRequest({ email, password });
 
       if (respuesta.success && respuesta.usuario && respuesta.idSesion) {
         login(respuesta.usuario, respuesta.idSesion);
         navigate('/dashboard');
       } else {
-        setError(respuesta.mensaje || 'Credenciales inválidas');
+        setError(respuesta.message || 'Credenciales inválidas');
       }
     } catch (err) {
       setError('Error de conexión con el servidor');
@@ -55,3 +53,4 @@ export const LoginPage: React.FC = () => {
     </div>
   );
 };
+export default LoginPage;

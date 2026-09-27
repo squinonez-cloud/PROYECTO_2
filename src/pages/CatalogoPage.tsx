@@ -40,3 +40,4 @@ export const CatalogoPage: React.FC = () => {
     </div>
   );
 };
+export default CatalogoPage;
