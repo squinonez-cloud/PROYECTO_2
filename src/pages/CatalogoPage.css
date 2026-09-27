@@ -65,3 +65,19 @@
   font-weight: bold;
   margin-top: auto;
 }
+
+.vinilo-agregar {
+  margin-top: 0.8rem;
+  width: 100%;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ff007f, #8a2be2);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.vinilo-agregado {
+  background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+}

@@ -117,6 +117,7 @@ Base URL en desarrollo: `http://localhost:4000/api`
 ```json
 {
   "idUsuario": 1,
+  "numeroTarjeta": "4111111111111111",
   "items": [
     { "id": 3, "cantidad": 2 }
   ]
@@ -137,6 +138,11 @@ se usa para el asiento contable (cargo a Caja).
 **Respuesta de error (400):**
 ```json
 { "success": false, "message": "Descripción del error" }
+```
+
+SI numeroTarjeta no pasa la validación de Luhn:
+```json
+{ "success": false, "message": "Número de tarjeta inválido" }
 ```
 
 Al crearse la orden, el backend genera automáticamente el asiento contable correspondiente (ver `services/contable.service.js`).

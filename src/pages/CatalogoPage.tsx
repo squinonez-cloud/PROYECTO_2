@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { obtenerVinilos } from '../services/catalogoService';
 import type { Vinilo } from '../services/catalogoService';
 import Navbar from '../components/Navbar';
+import { useCarrito } from '../context/CarritoContext';
 import './CatalogoPage.css';
 
 export const CatalogoPage: React.FC = () => {
   const [vinilos, setVinilos] = useState<Vinilo[]>([]);
   const [cargando, setCargando] = useState<boolean>(true);
+  const [agregadoId, setAgregadoId] = useState<number | null>(null);
+  const { agregarItem } = useCarrito();
 
   useEffect(() => {
     obtenerVinilos().then((data) => {
@@ -14,6 +17,12 @@ export const CatalogoPage: React.FC = () => {
       setCargando(false);
     });
   }, []);
+
+  function manejarAgregar(v: Vinilo) {
+    agregarItem({ id: v.id, titulo: v.titulo, artista: v.artista, precio: v.precio });
+    setAgregadoId(v.id);
+    setTimeout(() => setAgregadoId(null), 1200);
+  }
 
   if (cargando) {
     return (
@@ -39,6 +48,12 @@ export const CatalogoPage: React.FC = () => {
               <h3 className="vinilo-titulo">{v.titulo}</h3>
               <p className="vinilo-artista">{v.artista}</p>
               <span className="vinilo-precio">${v.precio.toFixed(2)}</span>
+              <button
+                className={agregadoId === v.id ? "vinilo-agregar vinilo-agregado" : "vinilo-agregar"}
+                onClick={() => manejarAgregar(v)}
+              >
+                {agregadoId === v.id ? "✓ Agregado" : "Agregar al carrito"}
+              </button>
             </div>
           </div>
         ))}
