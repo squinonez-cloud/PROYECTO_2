@@ -35,6 +35,12 @@ html, body, #root {
   padding: 0;
 }
 
+body {
+  background: radial-gradient(circle at 50% 30%, rgba(170, 59, 255, 0.15), transparent 60%),
+              #0a0812;
+  min-height: 100vh;
+}
+
 h1, h2 {
   font-weight: 500;
   color: var(--text-h);

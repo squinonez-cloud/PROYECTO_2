@@ -49,6 +49,9 @@ export const LoginPage: React.FC = () => {
           required
         />
         <button type="submit">Entrar</button>
+        <p className="auth-link">
+        ¿No tienes cuenta? <a href="/registro">Regístrate</a>
+        </p>
       </form>
     </div>
   );
