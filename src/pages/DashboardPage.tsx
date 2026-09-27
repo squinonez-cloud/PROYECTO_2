@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Navbar from '../components/Navbar';
 
 export const DashboardPage: React.FC = () => {
   const { usuario, idSesion, logout } = useAuth();
@@ -32,6 +33,8 @@ export const DashboardPage: React.FC = () => {
   };
 
   return (
+    <>
+    <Navbar />
     <div style={{ padding: '2rem', textAlign: 'center', color: '#fff' }}>
       <h1>Bienvenido, {usuario?.nombre || 'Usuario'}</h1>
       <button 
@@ -49,5 +52,6 @@ export const DashboardPage: React.FC = () => {
         Cerrar sesión
       </button>
     </div>
+    </>
   );
 };

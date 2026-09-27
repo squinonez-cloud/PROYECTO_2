@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useCarrito } from "../context/CarritoContext";
 import { useAuth } from "../context/AuthContext";
+import Navbar from "../components/Navbar";
 import "./CarritoPage.css";
 
 export default function CarritoPage() {
@@ -55,6 +56,8 @@ export default function CarritoPage() {
   }
 
   return (
+    <>
+    <Navbar />
     <div className="carrito-container">
       <h1>Tu carrito</h1>
 
@@ -103,5 +106,6 @@ export default function CarritoPage() {
         {enviando ? "Procesando..." : "Confirmar compra"}
       </button>
     </div>
+    </>
   );
 }

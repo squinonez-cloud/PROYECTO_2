@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { obtenerVinilos } from '../services/catalogoService';
 import type { Vinilo } from '../services/catalogoService';
+import Navbar from '../components/Navbar';
 import { useCarrito } from '../context/CarritoContext';
 import './CatalogoPage.css';
 
@@ -25,13 +26,18 @@ export const CatalogoPage: React.FC = () => {
 
   if (cargando) {
     return (
+      <>
+      <Navbar />
       <div className="catalogo-container">
         <h2 className="catalogo-titulo">Cargando catálogo...</h2>
       </div>
+      </>
     );
   }
 
   return (
+    <>
+    <Navbar />
     <div className="catalogo-container">
       <h1 className="catalogo-titulo">Catálogo de Vinilos</h1>
       <div className="catalogo-grid">
@@ -53,6 +59,7 @@ export const CatalogoPage: React.FC = () => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 export default CatalogoPage;

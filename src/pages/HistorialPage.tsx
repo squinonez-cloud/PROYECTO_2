@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { obtenerSesiones } from "../services/historialService";
 import type { SesionHistorial } from "../services/historialService";
+import Navbar from "../components/Navbar";
 import "./HistorialPage.css";
 
 export default function HistorialPage() {
@@ -23,6 +24,8 @@ export default function HistorialPage() {
   }, []);
 
   return (
+    <>
+    <Navbar />
     <div className="historial-container">
       <h1>Historial de sesiones</h1>
 
@@ -50,5 +53,6 @@ export default function HistorialPage() {
         </table>
       )}
     </div>
+    </>
   );
 }

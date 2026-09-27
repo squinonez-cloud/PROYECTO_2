@@ -152,6 +152,37 @@
   box-shadow: none;
 }
 
+/* Contenedor del input de contraseña con botón de mostrar/ocultar */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.password-input-wrapper input {
+  flex: 1;
+  padding-right: 2.75rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0.2rem 0.4rem;
+  line-height: 1;
+  box-shadow: none;
+  margin-top: 0;
+}
+
+.password-toggle-btn:hover:not(:disabled) {
+  transform: translateY(-50%);
+  box-shadow: none;
+}
+
 /* Mensajes de error */
 .auth-error {
   color: var(--error-color);

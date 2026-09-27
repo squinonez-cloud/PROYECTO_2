@@ -8,6 +8,7 @@ export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [mostrarPassword, setMostrarPassword] = useState<boolean>(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -41,13 +42,22 @@ export const LoginPage: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div className="password-input-wrapper">
+          <input
+            type={mostrarPassword ? 'text' : 'password'}
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="button"
+            className="password-toggle-btn"
+            onClick={() => setMostrarPassword(!mostrarPassword)}
+          >
+            {mostrarPassword ? '🙈' : '👁️'}
+          </button>
+        </div>
         <button type="submit">Entrar</button>
         <p className="auth-link">
         ¿No tienes cuenta? <a href="/registro">Regístrate</a>
