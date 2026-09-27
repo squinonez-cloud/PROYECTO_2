@@ -25,6 +25,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIdSesion(null);
     localStorage.removeItem('usuario');
     localStorage.removeItem('idSesion');
+    localStorage.removeItem('carrito');
   };
 
   return (

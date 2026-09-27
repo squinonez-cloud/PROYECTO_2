@@ -47,7 +47,7 @@ export const CatalogoPage: React.FC = () => {
             <div className="vinilo-info">
               <h3 className="vinilo-titulo">{v.titulo}</h3>
               <p className="vinilo-artista">{v.artista}</p>
-              <span className="vinilo-precio">${v.precio.toFixed(2)}</span>
+              <span className="vinilo-precio">Q{v.precio.toFixed(2)}</span>
               <button
                 className={agregadoId === v.id ? "vinilo-agregar vinilo-agregado" : "vinilo-agregar"}
                 onClick={() => manejarAgregar(v)}

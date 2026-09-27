@@ -1,5 +1,4 @@
 const BASE_URL = "http://localhost:4000/api";
-const USE_MOCK = false;
 
 export interface Orden {
   id: number;
