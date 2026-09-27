@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Vinilo, obtenerVinilos } from '../services/catalogoService';
+import { obtenerVinilos } from '../services/catalogoService';
+import type { Vinilo } from '../services/catalogoService';
 import './CatalogoPage.css';
 
 export const CatalogoPage: React.FC = () => {
