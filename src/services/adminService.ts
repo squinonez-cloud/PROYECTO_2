@@ -28,7 +28,8 @@ export async function obtenerOrdenes(): Promise<Orden[]> {
   if (!response.ok) {
     throw new Error("No se pudieron obtener las órdenes");
   }
-  return response.json();
+  const data = await response.json();
+  return data.map((o: any) => ({ ...o, total: Number(o.total) }));
 }
 
 export async function obtenerBalance(): Promise<Balance> {
@@ -36,5 +37,15 @@ export async function obtenerBalance(): Promise<Balance> {
   if (!response.ok) {
     throw new Error("No se pudo obtener el balance");
   }
-  return response.json();
+  const data = await response.json();
+  return {
+    ...data,
+    totalCargos: Number(data.totalCargos),
+    totalAbonos: Number(data.totalAbonos),
+    cuentas: data.cuentas.map((c: any) => ({
+      ...c,
+      totalCargos: Number(c.totalCargos),
+      totalAbonos: Number(c.totalAbonos),
+    })),
+  };
 }

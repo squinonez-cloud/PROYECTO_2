@@ -8,18 +8,25 @@ async function obtenerIdCuenta(codigo) {
   return filas[0].id;
 }
 
-async function generarAsientoVenta(idOrden, total) {
+async function registrarMovimiento(idOrden, idCuenta, tipoMovimiento, monto) {
+  await pool.query(
+    "INSERT INTO asientos_contables (id_orden, id_cuenta, tipo_movimiento, monto) VALUES (?, ?, ?, ?)",
+    [idOrden, idCuenta, tipoMovimiento, monto]
+  );
+}
+
+async function generarAsientoVenta(idOrden, subtotal, iva, total) {
   const idCaja = await obtenerIdCuenta("1000");
   const idVentas = await obtenerIdCuenta("4000");
+  const idIva = await obtenerIdCuenta("2000");
+
+  await registrarMovimiento(idOrden, idCaja, "cargo", total);
+  await registrarMovimiento(idOrden, idVentas, "abono", subtotal);
+  await registrarMovimiento(idOrden, idIva, "abono", iva);
 
   await pool.query(
-    "INSERT INTO asientos_contables (id_orden, id_cuenta, tipo_movimiento, monto) VALUES (?, ?, 'cargo', ?)",
-    [idOrden, idCaja, total]
-  );
-
-  await pool.query(
-    "INSERT INTO asientos_contables (id_orden, id_cuenta, tipo_movimiento, monto) VALUES (?, ?, 'abono', ?)",
-    [idOrden, idVentas, total]
+    "INSERT INTO impuestos_transacciones (id_orden, tipo_impuesto, monto) VALUES (?, ?, ?)",
+    [idOrden, "IVA", iva]
   );
 }
 

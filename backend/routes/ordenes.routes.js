@@ -33,7 +33,7 @@ router.post("/ordenes", async (req, res) => {
       });
     }
 
-    let total = 0;
+    let subtotalCentavos = 0;
 
     for (const item of items) {
       if (!item.id || !item.cantidad || item.cantidad <= 0) {
@@ -52,19 +52,28 @@ router.post("/ordenes", async (req, res) => {
         });
       }
 
-      total += rows[0].precio * item.cantidad;
+      subtotalCentavos += Math.round(Number(rows[0].precio) * 100) * item.cantidad;
     }
+
+    const ivaCentavos = Math.round(subtotalCentavos * 0.12);
+    const totalCentavos = subtotalCentavos + ivaCentavos;
+
+    const subtotal = subtotalCentavos / 100;
+    const iva = ivaCentavos / 100;
+    const total = totalCentavos / 100;
 
     const [resultado] = await pool.query(
       "INSERT INTO ordenes (id_usuario, total, estado) VALUES (?, ?, ?)",
       [idUsuario, total, "pendiente"]
     );
 
-    await generarAsientoVenta(resultado.insertId, total);
+    await generarAsientoVenta(resultado.insertId, subtotal, iva, total);
 
     return res.status(201).json({
       success: true,
       idOrden: resultado.insertId,
+      subtotal: subtotal,
+      iva: iva,
       total: total
     });
   } catch (error) {

@@ -12,7 +12,7 @@ async function probarConexion() {
     conexion.release();
     process.exit(0);
   } catch (error) {
-    console.error("Error al conectar:", error.message);
+    console.error("Error al conectar:", error.code, error.message);
     process.exit(1);
   }
 }

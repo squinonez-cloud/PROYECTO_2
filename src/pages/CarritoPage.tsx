@@ -12,6 +12,8 @@ export default function CarritoPage() {
   const { usuario } = useAuth();
 
   const total = items.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+  const iva = Math.round(total * 12) / 100;
+  const totalConIva = total + iva;
 
   async function confirmarCompra() {
     if (!usuario) {
@@ -91,7 +93,9 @@ export default function CarritoPage() {
       </table>
 
       <div className="carrito-total">
-        <span>Total: Q{total.toFixed(2)}</span>
+        <div>Subtotal: Q{total.toFixed(2)}</div>
+        <div>IVA (12%): Q{iva.toFixed(2)}</div>
+        <div>Total: Q{totalConIva.toFixed(2)}</div>
       </div>
 
       <input
