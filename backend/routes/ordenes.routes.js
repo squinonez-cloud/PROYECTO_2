@@ -15,9 +15,24 @@ function esTarjetaValida(numero) {
   return digitos.length >= 13 && suma % 10 === 0;
 }
 
+function esVencimientoValido(vencimiento) {
+  const coincide = /^(\d{2})\/(\d{2})$/.exec(vencimiento || "");
+  if (!coincide) return false;
+  const mes = Number(coincide[1]);
+  const anio = 2000 + Number(coincide[2]);
+  if (mes < 1 || mes > 12) return false;
+  const ahora = new Date();
+  const finDeMes = new Date(anio, mes, 0, 23, 59, 59);
+  return finDeMes >= ahora;
+}
+
+function esCvvValido(cvv) {
+  return /^\d{3,4}$/.test(cvv || "");
+}
+
 router.post("/ordenes", async (req, res) => {
   try {
-    const { idUsuario, numeroTarjeta, items } = req.body;
+    const { idUsuario, numeroTarjeta, vencimientoTarjeta, cvvTarjeta, items } = req.body;
 
     if (!idUsuario || !items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
@@ -30,6 +45,20 @@ router.post("/ordenes", async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Número de tarjeta inválido"
+      });
+    }
+
+    if (!esVencimientoValido(vencimientoTarjeta)) {
+      return res.status(400).json({
+        success: false,
+        message: "Fecha de vencimiento inválida o tarjeta vencida"
+      });
+    }
+
+    if (!esCvvValido(cvvTarjeta)) {
+      return res.status(400).json({
+        success: false,
+        message: "CVV inválido"
       });
     }
 

@@ -26,10 +26,12 @@ export default function Navbar() {
       <div style={{ display: "flex", gap: "1.25rem", flexWrap: "wrap" }}>
         <Link to="/dashboard" style={{ color: "#f4f4f9", textDecoration: "none" }}>Dashboard</Link>
         <Link to="/catalogo" style={{ color: "#f4f4f9", textDecoration: "none" }}>Catálogo</Link>
-        <Link to="/historial" style={{ color: "#f4f4f9", textDecoration: "none" }}>Historial</Link>
         <Link to="/carrito" style={{ color: "#f4f4f9", textDecoration: "none" }}>Carrito</Link>
         {usuario?.rol === "admin" && (
-          <Link to="/admin" style={{ color: "#f4f4f9", textDecoration: "none" }}>Admin</Link>
+          <>
+            <Link to="/historial" style={{ color: "#f4f4f9", textDecoration: "none" }}>Historial</Link>
+            <Link to="/admin" style={{ color: "#f4f4f9", textDecoration: "none" }}>Admin</Link>
+          </>
         )}
       </div>
       <button

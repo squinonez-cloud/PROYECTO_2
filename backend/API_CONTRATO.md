@@ -118,9 +118,9 @@ Base URL en desarrollo: `http://localhost:4000/api`
 {
   "idUsuario": 1,
   "numeroTarjeta": "4111111111111111",
-  "items": [
-    { "id": 3, "cantidad": 2 }
-  ]
+  "vencimientoTarjeta": "12/28",
+  "cvvTarjeta": "123",
+  "items": [{ "id": 3, "cantidad": 2 }]
 }
 ```
 

@@ -1,0 +1,67 @@
+.factura-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  color: #111;
+  border-radius: 12px;
+}
+
+.factura-encabezado {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #333;
+  padding-bottom: 1rem;
+}
+
+.factura-datos {
+  margin-bottom: 1.5rem;
+}
+
+.factura-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.factura-tabla th,
+.factura-tabla td {
+  padding: 0.6rem;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+
+.factura-totales {
+  text-align: right;
+}
+
+.factura-total-final {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.factura-acciones {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.factura-acciones button {
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background: #333;
+  color: #fff;
+  cursor: pointer;
+}
+
+@media print {
+  .factura-solo-pantalla {
+    display: none;
+  }
+  .factura-container {
+    margin: 0;
+    box-shadow: none;
+  }
+}

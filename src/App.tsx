@@ -10,6 +10,8 @@ import CarritoPage from "./pages/CarritoPage";
 import AdminPage from "./pages/AdminPage";
 import { useAuth } from "./context/AuthContext";
 import { CarritoProvider } from "./context/CarritoContext";
+import FacturaPage from "./pages/FacturaPage";
+
 
 function RutaAdmin({ children }: { children: React.ReactNode }) {
   const { usuario } = useAuth();
@@ -30,9 +32,10 @@ function App() {
             <Route path="/registro" element={<RegisterPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/catalogo" element={<CatalogoPage />} />
-            <Route path="/historial" element={<HistorialPage />} />
+            <Route path="/historial" element={<RutaAdmin><HistorialPage /></RutaAdmin>} />
             <Route path="/carrito" element={<CarritoPage />} />
             <Route path="/admin" element={<RutaAdmin><AdminPage /></RutaAdmin>} />
+            <Route path="/factura" element={<FacturaPage />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

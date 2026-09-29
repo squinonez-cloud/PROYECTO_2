@@ -3,6 +3,15 @@
   margin: 0 auto;
   padding: 2rem 1rem;
 }
+.carrito-tarjeta-detalles {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.carrito-tarjeta-detalles .carrito-input-tarjeta {
+  margin: 0;
+}
 
 .catalogo-titulo {
   color: #00f3ff;
